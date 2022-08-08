@@ -80,6 +80,31 @@ Synthesis, now to carry out the synthesis step First, we must launch Docker, the
  
 ## Day 2 - Understand importance of good floorplan vs bad floorplan and introduction to library cells
 
-On Day2 
- 
- 
+On Day 2 of my education focused on floor design, as well as the arrangement of preplaced cells with decoupling capacitors and power planning on the core. In the floor planning stage, we make our choice. pre-placed cells and macros in the chip's arrangement, IO pad locations, power pad counts, and network-wide power distribution.
+as well as with the cell deisgn flow.
+
+Cell Design Flow
+
+![Screenshot 2022-08-08 112422](https://user-images.githubusercontent.com/67407412/183350820-77cab5f9-75cd-46a6-b4ec-b35a348a0cff.jpg)
+
+
+So before running floorplan step, we can set few parameters for below dir or from synthesis.tcl file
+
+```
+home/vamsy.dasari126/Desktop/work/tools/openlane_working_dir/openlane/configuration/README.md
+set $env(parameter name) value
+```
+Now open the before openlane flow run floorplan
+
+```
+run_floorplan
+```
+![floorplan step successful](https://user-images.githubusercontent.com/67407412/183350779-be247459-81da-47a8-a9ab-63a9e68f2db4.jpg)
+
+Command to the magic tool to display the floorplan, therefore magic .tech libraries are added to the magic tool for this.
+```
+magic -T $pdk_path/pdks/sky130A/libs.tech/magic/sky130A.tech lef read ../../tmp/merged.lef def read picorv32a.floorplan.def &
+```
+
+
+
