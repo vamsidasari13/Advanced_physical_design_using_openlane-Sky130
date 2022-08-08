@@ -105,6 +105,7 @@ Command to the magic tool to display the floorplan, therefore magic .tech librar
 ```
 magic -T $pdk_path/pdks/sky130A/libs.tech/magic/sky130A.tech lef read ../../tmp/merged.lef def read picorv32a.floorplan.def &
 ```
+![magic tool invoke](https://user-images.githubusercontent.com/67407412/183356554-7c6d5f89-bb9b-487e-99a7-71a95de9f2e2.jpg)
 
 
 
