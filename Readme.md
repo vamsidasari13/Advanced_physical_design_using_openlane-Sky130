@@ -199,7 +199,7 @@ now run floorplan ```run_floorplan```
 ``` 
 run_cts
 ```
-CTS step](https://user-images.githubusercontent.com/67407412/183444568-bfe7fdcf-4736-4652-bf48-854406e67ff7.jpg)
+!CTS step](https://user-images.githubusercontent.com/67407412/183444568-bfe7fdcf-4736-4652-bf48-854406e67ff7.jpg)
 
 
 A cts.v file will be created  newly in the results folder.
