@@ -168,7 +168,7 @@ Cell fall delay
 
 ## Day 4 - Pre-layout timing analysis and importance of good clock tree
 
-On Day4 I firstly change the grid to ``` grid 044um 0.34um 0.23um 0.17um ```converted the inverter layout to standard cell lef using ``` lef write ``` on tkcon window of magic and later the inverter lef file design is included to our design and tested it. Also the synthesis optimization is done to reduce the slack value to positive. Thsi optimization step is like an iterative step until the slack is below -1 this has to be done continuously. The pre_sta file is configured with the locations of lib, the design synthesied file, sdc file. Thsi .conf file is used to run the sta step. The data generated ie., the hold, setup and tns,wns values. Later here we dive into the openroad within the openlane terminal.
+On Day4 I firstly change the grid to ``` grid 044um 0.34um 0.23um 0.17um ```converted the inverter layout to standard cell lef using ``` lef write ``` on tkcon window of magic and later the inverter lef file design is included to our design and tested it. Also the synthesis optimization is done to reduce the slack value to positive. This optimization step is like an iterative step until the slack is below -1 this has to be done continuously. The pre_sta file is configured with the locations of lib, the design synthesied file, sdc file. Thsi .conf file is used to run the sta step. The data generated ie., the hold, setup and tns,wns values. Later here we dive into the openroad within the openlane terminal.
 
 To chanage the grid size ``` grid 0.44um 0.34um 0.23um 0.17um ```
 
