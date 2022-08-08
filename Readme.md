@@ -157,9 +157,13 @@ Transiant Analysis of y vs a plot
 ![image](https://user-images.githubusercontent.com/67407412/183408005-159c66ef-3640-47dd-ae85-1674e7a08dbb.png)
 
 These 4 parameters are calculated.
+
 Rise transition delay
+
 Fall transition delay
+
 Cell rise delay
+
 Cell fall delay
 
 ## Day 4 - Pre-layout timing analysis and importance of good clock tree
@@ -199,7 +203,8 @@ now run floorplan ```run_floorplan```
 ``` 
 run_cts
 ```
-!CTS step](https://user-images.githubusercontent.com/67407412/183444568-bfe7fdcf-4736-4652-bf48-854406e67ff7.jpg)
+
+![CTS step](https://user-images.githubusercontent.com/67407412/183454233-08f506f8-2e38-49e7-b3b3-97604b93c71e.jpg)
 
 
 A cts.v file will be created  newly in the results folder.
