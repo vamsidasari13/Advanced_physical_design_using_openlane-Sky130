@@ -202,5 +202,15 @@ run_cts
 A cts.v file will be created  newly in the results folder.
 
 run openroad
+``` run_openroad
+read_db pico_cts.db
+read verilgo /openLANE_flow/design/picorv32a/runs/06-08_16-24/results/synthesis/picorv32a.synthesis_cts.v
+read_library $::env(LIB_SYNTH_COMPLETE)
+link_design picorv32a
+read_sdc /openLANE_flow/designs/picorv32a/src/my_base.sdc
+set_propagated_clock [all_clocks]
+report_checks -path_delay min_max -fields {slew trans net cap input_pin} -format full_clock_expanded -digits 4
+```
+
 
 
