@@ -199,8 +199,12 @@ now run floorplan ```run_floorplan```
 ``` 
 run_cts
 ```
+CTS step](https://user-images.githubusercontent.com/67407412/183444568-bfe7fdcf-4736-4652-bf48-854406e67ff7.jpg)
+
+
 A cts.v file will be created  newly in the results folder.
 
+STA analysis (with the openlane flow) instead of cts 
 run openroad
 ``` run_openroad
 read_db pico_cts.db
@@ -211,6 +215,30 @@ read_sdc /openLANE_flow/designs/picorv32a/src/my_base.sdc
 set_propagated_clock [all_clocks]
 report_checks -path_delay min_max -fields {slew trans net cap input_pin} -format full_clock_expanded -digits 4
 ```
+To get the reports of setup and hold skew 
+```
+report_clock_skew -hold
+report_clock_skew -setup
+```
 
+## Day 5 - Final steps for RTL2GDS
 
+On Day5 the routing and the post routing is done with the Tritionroute and spef_extractor 
 
+Now run ``` gen_pdn```
+
+a pdn.def file is created which contains the cts also with the power distribution network.
+
+![gen_pds ](https://user-images.githubusercontent.com/67407412/183449016-1013b152-53ef-4e1b-b6ed-e11816786b43.jpg)
+
+The routing is done with the tool tritionroute the inputs for the tool are .lef .def and preprocessed route guides. so in this routing run there might occur some routing errors. The spef extraction is done after the routing stage to remove the parasitic capacitances from the design. 
+```run_routing
+run_spef_extraction
+```
+![rotuing stage no violations](https://user-images.githubusercontent.com/67407412/183449639-f03219fa-78a7-4280-aef9-f9bd65b3a178.jpg)
+
+After everything is done the will be 2 files as output ie., the .mag and .gds files. we can view the .mag file in magic tool or can read the .gds file from magic tool.
+
+![final alyout](https://user-images.githubusercontent.com/67407412/183449673-d012a216-2612-40ac-9774-e9f351fe749e.jpg)
+
+![cell expand](https://user-images.githubusercontent.com/67407412/183449695-9289d57b-d8d2-43b5-b376-c5da3488ac35.jpg)
