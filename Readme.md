@@ -80,10 +80,11 @@ Synthesis, now to carry out the synthesis step First, we must launch Docker, the
  
 ## Day 2 - Understand importance of good floorplan vs bad floorplan and introduction to library cells
 
-On Day 2 of my education focused on floor design, as well as the arrangement of preplaced cells with decoupling capacitors and power planning on the core. In the floor planning stage, we make our choice. pre-placed cells and macros in the chip's arrangement, IO pad locations, power pad counts, and network-wide power distribution.
+On Day 2 of the workshop is focused on floorplan, as well as the arrangement of preplaced cells with decoupling capacitors and power planning on the core. In the floor planning stage, we make our choice. pre-placed cells and macros in the chip's arrangement, IO pad locations, power pad counts, and network-wide power distribution.
 as well as with the cell deisgn flow.
 
-Cell Design Flow
+#### Cell Design Flow
+The stages of the cell design flow give the overall flow for the design of typical cells. A library has standard cells that contain data about the various components, their functions, and sizes as well. The drive strength of a component is indicated by its size. Additionally, it contains details on several threshold voltages that unintentionally alter the component's speed. 
 
 ![Screenshot 2022-08-08 112422](https://user-images.githubusercontent.com/67407412/183350820-77cab5f9-75cd-46a6-b4ec-b35a348a0cff.jpg)
 
@@ -92,6 +93,10 @@ So before running floorplan step, we can set few parameters for below dir or fro
 
 ```
 home/vamsy.dasari126/Desktop/work/tools/openlane_working_dir/openlane/configuration/README.md
+
+```
+Edit the parameters with the below command 
+```
 set $env(parameter name) value
 ```
 Now open the before openlane flow run floorplan
@@ -108,6 +113,94 @@ magic -T $pdk_path/pdks/sky130A/libs.tech/magic/sky130A.tech lef read ../../tmp/
 Layout after floorplan stage in Magic tool
 ![magic tool invoke](https://user-images.githubusercontent.com/67407412/183356554-7c6d5f89-bb9b-487e-99a7-71a95de9f2e2.jpg)
 
+### Placement 
 
+Following floorplan, we place the standard cells and checked the DRCs. In OpenLANE, we perform this by issuing the command run placement. There are  two levels of placement in OpenLANE are Global placement and Detailed placement. When using detailed placement, the placements of the cells are controlled, but when using global placement, all cells are distributed randomly over the floorplan. Legalization ensures that cells do not overlap in this way.
+
+Layout after the Placement step
+![placement ](https://user-images.githubusercontent.com/67407412/183409790-089c3c57-b321-4305-b4d4-0bcd17d63a26.jpg)
+
+
+## Day 3 - Design and characterize one library cell using Magic Layout tool and ngspice
+
+Day 3 describes the fabrication process using the 6-mask CMOS technology, and walks through each step. The custom inverter is cloned form github.Library Characterization 
+
+Step to fabricate 16 mask cmos process
+1) slecting a substrate
+2) creating active region for tansistors
+3) N-well and P-well formation
+4) Formation of gate
+5) Lightly doped drain(LDD) formation
+6) source and drain formation
+7) steps to form contacts and interconnects
+8) Higher level metal formation
+
+![image](https://user-images.githubusercontent.com/67407412/183392823-4b0de6a7-8668-475b-9dad-85c8ed5a4a10.png)
+
+Here we clone the repo of inverter design to analyze it in the magic tool 
+The inverters were created with the Magic tool. The tech file (sky130A.tech) and the.mag file are the inputs for this tool. . DRC is a magic tool that makes sure our layout is free of flaws.
+Inverter layout in magic tool
+![inverter design of nicson github](https://user-images.githubusercontent.com/67407412/183401790-a35f58a6-eb01-4940-b9ed-5b56d1944033.jpg)
+
+Inverter extract to spice 
+
+![spice file ](https://user-images.githubusercontent.com/67407412/183409154-e6561e41-eeba-4564-bf5a-d96edd439e90.jpg)
+
+Final spice deck using sky130 tech
+
+![flow for spice deck](https://user-images.githubusercontent.com/67407412/183407489-c35172bb-048a-46cc-bc6f-ecf40fab0bbb.jpg)
+
+Once it has been extracted, we use the NGSPice tool to run a transient analysis and identify the four parameters specified at the start of this section.
+
+Transiant Analysis of y vs a plot  
+
+![image](https://user-images.githubusercontent.com/67407412/183408005-159c66ef-3640-47dd-ae85-1674e7a08dbb.png)
+
+These 4 parameters are calculated.
+Rise transition delay
+Fall transition delay
+Cell rise delay
+Cell fall delay
+
+## Day 4 - Pre-layout timing analysis and importance of good clock tree
+
+On Day4 I firstly change the grid to ``` grid 044um 0.34um 0.23um 0.17um ```converted the inverter layout to standard cell lef using ``` lef write ``` on tkcon window of magic and later the inverter lef file design is included to our design and tested it. Also the synthesis optimization is done to reduce the slack value to positive. Thsi optimization step is like an iterative step until the slack is below -1 this has to be done continuously. The pre_sta file is configured with the locations of lib, the design synthesied file, sdc file. Thsi .conf file is used to run the sta step. The data generated ie., the hold, setup and tns,wns values. Later here we dive into the openroad within the openlane terminal.
+
+To chanage the grid size ``` grid 0.44um 0.34um 0.23um 0.17um ```
+
+later convert the layout to .lef file ``` lef write ```
+
+![grid to track](https://user-images.githubusercontent.com/67407412/183417514-0e454af8-b863-4dd7-8f5d-54a5b68e6ae3.jpg)
+
+The layout with the coustom inverter cell in the design
+
+![layout view with expand command](https://user-images.githubusercontent.com/67407412/183432339-904cb83f-283a-4748-9c13-559c745320c1.jpg)
+
+The Fanout to reduce the slack ``` set ::env( SYNTH_MAX_FANOUT) 4 ```
+
+![changing fanout to reduce slack ](https://user-images.githubusercontent.com/67407412/183434364-61fd399c-66b2-4445-883f-56265e49c27b.jpg)
+
+Here replacing the cell to reduce the slack can also be done, with 
+
+``` report_net -connections _netnumber_
+replace_cell _netnumber_ sky130_fd_sc_hd__buf_(buf no)
+report_checks -fields {net cap slew input_pins} -digits 4
+```
+
+reduce the slack violations below -1 this is an iterative process until the slack is negligible.
+
+now write the verilog file with updated slack.
+
+```
+write_verilog /home/vamsy.dasari126/Desktop/work/tools/openlane_working_dir/openlane/designs/picorv32a/runs/06-08_16-24/results/synthesis/picorv32a.synthesis.v
+```
+now run floorplan ```run_floorplan```
+
+``` 
+run_cts
+```
+A cts.v file will be created  newly in the results folder.
+
+run openroad
 
 
